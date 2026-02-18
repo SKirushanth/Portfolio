@@ -1,16 +1,12 @@
 @import "tailwindcss";
 
 :root {
-  background-color: #0a0a0a;
+  background-color: #0d0d0d; /* Deep charcoal/black */
   color: white;
 }
 
+/* Ensure the font matches the clean sans-serif in your image */
 body {
-  margin: 0;
-  font-family: 'Inter', sans-serif; 
-}
-
-
-.rounded-bento {
-  border-radius: 2.5rem;
+  font-family: 'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
