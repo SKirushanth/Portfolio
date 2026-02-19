@@ -6,40 +6,47 @@ export default function Projects() {
   ];
 
   return (
-    <section className="px-4 py-20 bg-[#0a0a0a]">
-      {/* Header Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-8 mb-16 items-end">
-        <div className="md:col-span-7">
-          <p className="text-orange-500 font-bold uppercase text-xs tracking-widest mb-4">Behind the Designs</p>
-          <h2 className="text-4xl md:text-6xl font-bold leading-tight">
-            Shaping Experiences That Make Life Simpler
-          </h2>
-        </div>
-        <div className="md:col-span-5 max-w-md">
-          <p className="text-gray-400 text-lg mb-6 leading-relaxed">
-            I'm a software engineer focused on building clean, intuitive interfaces that solve real-world problems.
-          </p>
-          <button className="bg-orange-600 px-8 py-3 rounded-full text-sm font-bold flex items-center gap-2">
-            Let's Talk <span className="bg-white/20 rounded-full p-1 text-[10px]">→</span>
-          </button>
-        </div>
-      </div>
-
-      {/* Portrait Image Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {projects.map((p) => (
-          <div key={p.id} className="group cursor-pointer">
-            <div className="aspect-[3/4] overflow-hidden rounded-[2.5rem] mb-6">
-              <img 
-                src={p.img} 
-                alt={p.title} 
-                className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
-              />
-            </div>
-            <p className="text-orange-500 text-[10px] font-bold uppercase mb-1">{p.cat}</p>
-            <h4 className="text-2xl font-bold">{p.title}</h4>
+    /* Reduced top padding from py-24 to pt-12 to close the gap with Services */
+    <section id="projects" className="px-6 pt-12 pb-24 bg-[#0a0a0a] text-white">
+      <div className="max-w-7xl mx-auto">
+        
+        {/* Header Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 mb-20 items-end">
+          <div className="md:col-span-7">
+            <p className="text-orange-500 font-bold uppercase text-xs tracking-widest mb-4">Behind the Designs</p>
+            <h2 className="text-4xl md:text-6xl font-bold leading-tight tracking-tighter">
+              Shaping Experiences That Make Life Simpler
+            </h2>
           </div>
-        ))}
+          <div className="md:col-span-5 max-w-md">
+            <p className="text-gray-400 text-lg mb-6 leading-relaxed">
+              I'm a software engineer focused on building clean, intuitive interfaces that solve real-world problems.
+            </p>
+            <button className="bg-orange-600 hover:bg-orange-700 transition-colors px-8 py-3 rounded-full text-sm font-bold flex items-center gap-2">
+              Let's Talk <span className="bg-white/20 rounded-full p-1 text-[10px]">→</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Portrait Image Grid */}
+        <div className="max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {projects.map((p) => (
+              <div key={p.id} className="group cursor-pointer">
+                <div className="aspect-[4/5] overflow-hidden rounded-[2rem] mb-5">
+                  <img 
+                    src={p.img} 
+                    alt={p.title} 
+                    className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
+                  />
+                </div>
+                <p className="text-orange-500 text-[10px] font-bold uppercase mb-1 tracking-widest">{p.cat}</p>
+                <h4 className="text-xl font-bold group-hover:text-orange-500 transition-colors">{p.title}</h4>
+              </div>
+            ))}
+          </div>
+        </div>
+        
       </div>
     </section>
   );

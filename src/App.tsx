@@ -1,5 +1,9 @@
+
+import Footer from './components/Footer';
 import Hero from './sections/Hero';
+import Projects from './sections/Projects';
 import Services from './sections/Services';
+import Contact from './sections/Contact';
 
 function App() {
   return (
@@ -7,6 +11,10 @@ function App() {
       <div className="max-w-[1400px] mx-auto">
         <Hero />
         <Services />
+        <Projects />
+        <Contact />
+        <Footer />
+        
       </div>
     </main>
   );
