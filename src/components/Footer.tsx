@@ -1,9 +1,7 @@
-import React from 'react';
-
 export default function Footer() {
   return (
     <div className='bg-[#0a0a0a] pt-20 px-4'>
-      <footer className="bg-[#131314] w-full max-w-[1350px] mx-auto text-white pt-12 lg:pt-16 px-4 sm:px-8 md:px-16 lg:px-28 rounded-tl-[3rem] rounded-tr-[3rem] overflow-hidden">
+      <footer className="bg-[#131314] w-full max-w-337.5 mx-auto text-white pt-12 lg:pt-16 px-4 sm:px-8 md:px-16 lg:px-28 rounded-tl-[3rem] rounded-tr-[3rem] overflow-hidden">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center text-center md:text-left gap-12">
           
           {/* Logo & Description */}
@@ -41,7 +39,7 @@ export default function Footer() {
 
         {/* Centralized PORTFOLIO Text */}
         <div className="relative mt-8 flex justify-center">
-          <div className="absolute inset-x-0 bottom-[-40px] mx-auto w-full max-w-4xl h-64 bg-orange-600 rounded-full blur-[130px] opacity-20 pointer-events-none"></div>
+          <div className="absolute inset-x-0 -bottom-10 mx-auto w-full max-w-4xl h-64 bg-orange-600 rounded-full blur-[130px] opacity-20 pointer-events-none"></div>
           <h1 className="relative z-10 text-center font-extrabold leading-[0.7] text-transparent text-[clamp(3rem,16vw,18rem)] [-webkit-text-stroke:1px_#e85a2d] select-none opacity-40 mb-[-1%]">
             PORTFOLIO
           </h1>

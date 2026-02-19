@@ -8,7 +8,7 @@ import Contact from './sections/Contact';
 function App() {
   return (
     <main className="bg-[#0a0a0a] min-h-screen">
-      <div className="max-w-[1400px] mx-auto">
+      <div className="max-w-350 mx-auto">
         <Hero />
         <Services />
         <Projects />

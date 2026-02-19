@@ -45,7 +45,7 @@ export default function Services() {
           }
         ].map((service, index) => (
           <div key={index} className="bg-[#111] p-10 rounded-[2.5rem] border border-white/5 hover:border-orange-500/30 transition-all group">
-            <div className="w-16 h-[2px] bg-orange-600 mb-8 transition-all group-hover:w-full" />
+            <div className="w-16 h-0.5 bg-orange-600 mb-8 transition-all group-hover:w-full" />
             <p className="text-orange-500 text-[10px] font-bold mb-3 uppercase tracking-tighter">
               {service.sub}
             </p>

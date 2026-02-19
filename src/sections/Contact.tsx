@@ -17,7 +17,7 @@ export default function Contact() {
   return (
     <section id="contact" className="bg-[#0a0a0a] py-16 md:py-24 px-5 relative overflow-hidden">
       {/* Glow effect - centered for mobile */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[300px] bg-[#e85a2d]/10 rounded-full blur-[100px] pointer-events-none opacity-50 md:opacity-100" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-75 bg-[#e85a2d]/10 rounded-full blur-[100px] pointer-events-none opacity-50 md:opacity-100" />
 
       <div className="max-w-6xl mx-auto relative z-10">
         <div className="flex flex-col lg:grid lg:grid-cols-2 gap-12 lg:gap-16">
@@ -66,7 +66,7 @@ export default function Contact() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="bg-[#131314] p-6 sm:p-10 md:p-12 rounded-[2rem] md:rounded-[2.5rem] border border-white/5 shadow-2xl mt-4 lg:mt-0"
+            className="bg-[#131314] p-6 sm:p-10 md:p-12 rounded-4xl md:rounded-[2.5rem] border border-white/5 shadow-2xl mt-4 lg:mt-0"
           >
             <form onSubmit={handleSubmit} className="space-y-5 md:space-y-6">
               <div className="space-y-4 md:space-y-0 md:grid md:grid-cols-2 md:gap-6">

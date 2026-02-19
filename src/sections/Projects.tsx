@@ -6,8 +6,8 @@ export default function Projects() {
   ];
 
   return (
-    /* Reduced top padding from py-24 to pt-12 to close the gap with Services */
-    <section id="projects" className="px-6 pt-12 pb-24 bg-[#0a0a0a] text-white">
+    /* Added id="projects" for navigation */
+    <section id="projects" className="px-6 py-24 bg-[#0a0a0a] text-white">
       <div className="max-w-7xl mx-auto">
         
         {/* Header Grid */}
@@ -28,12 +28,13 @@ export default function Projects() {
           </div>
         </div>
 
-        {/* Portrait Image Grid */}
+        {/* Portrait Image Grid - Size Reduced via max-w container */}
         <div className="max-w-5xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {projects.map((p) => (
               <div key={p.id} className="group cursor-pointer">
-                <div className="aspect-[4/5] overflow-hidden rounded-[2rem] mb-5">
+                {/* Reduced size by adjusting aspect ratio and margin */}
+                <div className="aspect-4/5 overflow-hidden rounded-4xl mb-5">
                   <img 
                     src={p.img} 
                     alt={p.title} 
