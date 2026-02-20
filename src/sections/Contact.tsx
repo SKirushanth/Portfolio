@@ -41,20 +41,30 @@ export default function Contact() {
                 <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-[#131314] flex items-center justify-center border border-white/5">
                   <Mail className="w-4 h-4 md:w-5 md:h-5 text-[#e85a2d]" />
                 </div>
-                <span className="text-white text-sm md:text-base font-medium">hello@yourdomain.com</span>
+                <span className="text-white text-sm md:text-base font-medium">kirushanth.20233050@iit.ac.lk</span>
               </a>
               <div className="flex items-center gap-3 md:gap-4">
                 <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-[#131314] flex items-center justify-center border border-white/5">
                   <Phone className="w-4 h-4 md:w-5 md:h-5 text-[#e85a2d]" />
                 </div>
-                <span className="text-white text-sm md:text-base font-medium">+94 76 837 7843</span>
+                <span className="text-white text-sm md:text-base font-medium">+94 70 139 6579</span>
               </div>
             </div>
 
             {/* Social Icons - Centered for Mobile */}
             <div className="flex justify-center lg:justify-start gap-3 mt-10">
-              {[Linkedin, Github, MessageSquare].map((Icon, i) => (
-                <a key={i} href="#" className="w-11 h-11 md:w-12 md:h-12 rounded-xl bg-[#131314] border border-white/5 flex items-center justify-center text-neutral-400">
+              {[
+                { Icon: Linkedin, href: "https://www.linkedin.com/in/kirushanth-sathiyaseelan" },
+                { Icon: Github, href: "https://github.com/SKirushanth?tab=repositories" },
+                { Icon: MessageSquare, href: "#" },
+              ].map(({ Icon, href }, i) => (
+                <a
+                  key={i}
+                  href={href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="w-11 h-11 md:w-12 md:h-12 rounded-xl bg-[#131314] border border-white/5 flex items-center justify-center text-neutral-400"
+                >
                   <Icon className="w-5 h-5" />
                 </a>
               ))}
