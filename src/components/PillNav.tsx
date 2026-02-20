@@ -102,7 +102,7 @@ const PillNav: React.FC<PillNavProps> = ({
 
   return (
     <nav 
-      className="fixed top-6 w-full px-6 flex justify-end md:justify-center pointer-events-none"
+      className="fixed top-8 w-full px-6 flex justify-end md:justify-center pointer-events-none"
       style={{ zIndex: 100 }}
     >
       {/* Desktop Menu */}
