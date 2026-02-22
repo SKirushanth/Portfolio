@@ -1,21 +1,18 @@
 import React, { useState } from "react";
-import { motion } from "framer-motion";
-import { Mail, Phone, Linkedin, Github, Send, MessageSquare } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Mail, Phone, Linkedin, Github, Send, MessageSquare, Loader2 } from "lucide-react";
 
 export default function Contact() {
-  // Added statuses for better user feedback
   const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setStatus('sending');
 
-    // 1. Capture form data using the "name" attributes
     const formData = new FormData(e.currentTarget);
     const body = Object.fromEntries(formData);
 
     try {
-      // 2. Send to your Vercel Serverless Function
       const res = await fetch('/api/send', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -24,24 +21,28 @@ export default function Contact() {
 
       if (res.ok) {
         setStatus('success');
-        e.currentTarget.reset(); // Clear form on success
+        (e.target as HTMLFormElement).reset();
+        
+        // Reset status back to idle after 5 seconds to clear the message
+        setTimeout(() => setStatus('idle'), 5000);
       } else {
         setStatus('error');
       }
     } catch (err) {
+      console.error("Submission error:", err);
       setStatus('error');
     }
   };
 
   return (
     <section id="contact" className="bg-[#0a0a0a] py-16 md:py-24 px-5 relative overflow-hidden">
-      {/* Glow effect */}
+      {/* Background Glow */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-75 bg-[#e85a2d]/10 rounded-full blur-[100px] pointer-events-none opacity-50 md:opacity-100" />
 
       <div className="max-w-6xl mx-auto relative z-10">
         <div className="flex flex-col lg:grid lg:grid-cols-2 gap-12 lg:gap-16">
           
-          {/* Left: Info Header */}
+          {/* Left Side: Info */}
           <div className="text-center lg:text-left">
             <span className="text-[#e85a2d] font-bold text-[10px] md:text-xs uppercase tracking-[0.3em] mb-3 block">
               Get in Touch
@@ -57,7 +58,7 @@ export default function Contact() {
             {/* Contact Details */}
             <div className="flex flex-col items-center lg:items-start gap-4 md:gap-6">
               <a href="mailto:kirushanth.20233050@iit.ac.lk" className="flex items-center gap-3 md:gap-4 group">
-                <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-[#131314] flex items-center justify-center border border-white/5">
+                <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-[#131314] flex items-center justify-center border border-white/5 group-hover:border-[#e85a2d]/50 transition-colors">
                   <Mail className="w-4 h-4 md:w-5 md:h-5 text-[#e85a2d]" />
                 </div>
                 <span className="text-white text-sm md:text-base font-medium">kirushanth.20233050@iit.ac.lk</span>
@@ -82,7 +83,7 @@ export default function Contact() {
                   href={href}
                   target="_blank"
                   rel="noreferrer"
-                  className="w-11 h-11 md:w-12 md:h-12 rounded-xl bg-[#131314] border border-white/5 flex items-center justify-center text-neutral-400 hover:text-[#e85a2d] transition-colors"
+                  className="w-11 h-11 md:w-12 md:h-12 rounded-xl bg-[#131314] border border-white/5 flex items-center justify-center text-neutral-400 hover:text-[#e85a2d] transition-all"
                 >
                   <Icon className="w-5 h-5" />
                 </a>
@@ -90,7 +91,7 @@ export default function Contact() {
             </div>
           </div>
 
-          {/* Right: Form Card */}
+          {/* Right Side: Form */}
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -102,7 +103,7 @@ export default function Contact() {
                 <div className="space-y-2">
                   <label className="text-[9px] md:text-[10px] uppercase tracking-widest text-neutral-500 font-bold ml-1">Name</label>
                   <input 
-                    name="name" // Added name attribute
+                    name="name"
                     type="text" 
                     required 
                     placeholder="Your Name"
@@ -112,7 +113,7 @@ export default function Contact() {
                 <div className="space-y-2">
                   <label className="text-[9px] md:text-[10px] uppercase tracking-widest text-neutral-500 font-bold ml-1">Email</label>
                   <input 
-                    name="email" // Added name attribute
+                    name="email"
                     type="email" 
                     required 
                     placeholder="Email"
@@ -124,7 +125,7 @@ export default function Contact() {
               <div className="space-y-2">
                 <label className="text-[9px] md:text-[10px] uppercase tracking-widest text-neutral-500 font-bold ml-1">Message</label>
                 <textarea 
-                  name="message" // Added name attribute
+                  name="message"
                   rows={4} 
                   required 
                   placeholder="Tell me about your project..."
@@ -135,15 +136,46 @@ export default function Contact() {
               <button 
                 type="submit" 
                 disabled={status === 'sending'}
-                className="w-full bg-[#e85a2d] text-black font-bold py-4 md:py-5 rounded-xl flex items-center justify-center gap-2 hover:bg-[#ff6b3d] transition-all active:scale-[0.96] text-sm md:text-base disabled:opacity-50"
+                className="w-full bg-[#e85a2d] disabled:bg-neutral-800 text-black font-bold py-4 md:py-5 rounded-xl flex items-center justify-center gap-2 hover:bg-[#ff6b3d] transition-all active:scale-[0.98] text-sm md:text-base disabled:cursor-not-allowed"
               >
-                {status === 'sending' ? "SENDING..." : "SEND MESSAGE"}
-                <Send className="w-4 h-4" />
+                {status === 'sending' ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    SENDING...
+                  </>
+                ) : (
+                  <>
+                    SEND MESSAGE
+                    <Send className="w-4 h-4" />
+                  </>
+                )}
               </button>
 
-              {/* Added Feedback Messages */}
-              {status === 'success' && <p className="text-green-500 text-xs text-center font-bold uppercase tracking-widest">Message sent successfully!</p>}
-              {status === 'error' && <p className="text-red-500 text-xs text-center font-bold uppercase tracking-widest">Error. Please try again.</p>}
+              {/* Status Feedback */}
+              <div className="min-h-[20px] text-center">
+                <AnimatePresence mode="wait">
+                  {status === 'success' && (
+                    <motion.p 
+                      initial={{ opacity: 0, y: 5 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0 }}
+                      className="text-green-500 text-[10px] font-bold uppercase tracking-[0.2em]"
+                    >
+                      Message sent successfully!
+                    </motion.p>
+                  )}
+                  {status === 'error' && (
+                    <motion.p 
+                      initial={{ opacity: 0, y: 5 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0 }}
+                      className="text-red-500 text-[10px] font-bold uppercase tracking-[0.2em]"
+                    >
+                      Something went wrong. Try again.
+                    </motion.p>
+                  )}
+                </AnimatePresence>
+              </div>
             </form>
           </motion.div>
         </div>
