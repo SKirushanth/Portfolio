@@ -3,26 +3,45 @@ import { motion } from "framer-motion";
 import { Mail, Phone, Linkedin, Github, Send, MessageSquare } from "lucide-react";
 
 export default function Contact() {
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  // Added statuses for better user feedback
+  const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsSubmitting(true);
-    setTimeout(() => {
-      alert("Message sent successfully!");
-      setIsSubmitting(false);
-    }, 1500);
+    setStatus('sending');
+
+    // 1. Capture form data using the "name" attributes
+    const formData = new FormData(e.currentTarget);
+    const body = Object.fromEntries(formData);
+
+    try {
+      // 2. Send to your Vercel Serverless Function
+      const res = await fetch('/api/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+
+      if (res.ok) {
+        setStatus('success');
+        e.currentTarget.reset(); // Clear form on success
+      } else {
+        setStatus('error');
+      }
+    } catch (err) {
+      setStatus('error');
+    }
   };
 
   return (
     <section id="contact" className="bg-[#0a0a0a] py-16 md:py-24 px-5 relative overflow-hidden">
-      {/* Glow effect - centered for mobile */}
+      {/* Glow effect */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-75 bg-[#e85a2d]/10 rounded-full blur-[100px] pointer-events-none opacity-50 md:opacity-100" />
 
       <div className="max-w-6xl mx-auto relative z-10">
         <div className="flex flex-col lg:grid lg:grid-cols-2 gap-12 lg:gap-16">
           
-          {/* Top/Left: Info Header */}
+          {/* Left: Info Header */}
           <div className="text-center lg:text-left">
             <span className="text-[#e85a2d] font-bold text-[10px] md:text-xs uppercase tracking-[0.3em] mb-3 block">
               Get in Touch
@@ -35,9 +54,9 @@ export default function Contact() {
               I’m available for freelance and full-time opportunities. Drop a message!
             </p>
 
-            {/* Contact Details - Stacked for Mobile */}
+            {/* Contact Details */}
             <div className="flex flex-col items-center lg:items-start gap-4 md:gap-6">
-              <a href="mailto:hello@yourdomain.com" className="flex items-center gap-3 md:gap-4 group">
+              <a href="mailto:kirushanth.20233050@iit.ac.lk" className="flex items-center gap-3 md:gap-4 group">
                 <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-[#131314] flex items-center justify-center border border-white/5">
                   <Mail className="w-4 h-4 md:w-5 md:h-5 text-[#e85a2d]" />
                 </div>
@@ -51,7 +70,7 @@ export default function Contact() {
               </div>
             </div>
 
-            {/* Social Icons - Centered for Mobile */}
+            {/* Social Icons */}
             <div className="flex justify-center lg:justify-start gap-3 mt-10">
               {[
                 { Icon: Linkedin, href: "https://www.linkedin.com/in/kirushanth-sathiyaseelan" },
@@ -63,7 +82,7 @@ export default function Contact() {
                   href={href}
                   target="_blank"
                   rel="noreferrer"
-                  className="w-11 h-11 md:w-12 md:h-12 rounded-xl bg-[#131314] border border-white/5 flex items-center justify-center text-neutral-400"
+                  className="w-11 h-11 md:w-12 md:h-12 rounded-xl bg-[#131314] border border-white/5 flex items-center justify-center text-neutral-400 hover:text-[#e85a2d] transition-colors"
                 >
                   <Icon className="w-5 h-5" />
                 </a>
@@ -71,7 +90,7 @@ export default function Contact() {
             </div>
           </div>
 
-          {/* Bottom/Right: Form Card */}
+          {/* Right: Form Card */}
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -83,6 +102,7 @@ export default function Contact() {
                 <div className="space-y-2">
                   <label className="text-[9px] md:text-[10px] uppercase tracking-widest text-neutral-500 font-bold ml-1">Name</label>
                   <input 
+                    name="name" // Added name attribute
                     type="text" 
                     required 
                     placeholder="Your Name"
@@ -92,6 +112,7 @@ export default function Contact() {
                 <div className="space-y-2">
                   <label className="text-[9px] md:text-[10px] uppercase tracking-widest text-neutral-500 font-bold ml-1">Email</label>
                   <input 
+                    name="email" // Added name attribute
                     type="email" 
                     required 
                     placeholder="Email"
@@ -103,6 +124,7 @@ export default function Contact() {
               <div className="space-y-2">
                 <label className="text-[9px] md:text-[10px] uppercase tracking-widest text-neutral-500 font-bold ml-1">Message</label>
                 <textarea 
+                  name="message" // Added name attribute
                   rows={4} 
                   required 
                   placeholder="Tell me about your project..."
@@ -112,15 +134,18 @@ export default function Contact() {
 
               <button 
                 type="submit" 
-                disabled={isSubmitting}
-                className="w-full bg-[#e85a2d] text-black font-bold py-4 md:py-5 rounded-xl flex items-center justify-center gap-2 hover:bg-[#ff6b3d] transition-all active:scale-[0.96] text-sm md:text-base"
+                disabled={status === 'sending'}
+                className="w-full bg-[#e85a2d] text-black font-bold py-4 md:py-5 rounded-xl flex items-center justify-center gap-2 hover:bg-[#ff6b3d] transition-all active:scale-[0.96] text-sm md:text-base disabled:opacity-50"
               >
-                {isSubmitting ? "SENDING..." : "SEND MESSAGE"}
+                {status === 'sending' ? "SENDING..." : "SEND MESSAGE"}
                 <Send className="w-4 h-4" />
               </button>
+
+              {/* Added Feedback Messages */}
+              {status === 'success' && <p className="text-green-500 text-xs text-center font-bold uppercase tracking-widest">Message sent successfully!</p>}
+              {status === 'error' && <p className="text-red-500 text-xs text-center font-bold uppercase tracking-widest">Error. Please try again.</p>}
             </form>
           </motion.div>
-
         </div>
       </div>
     </section>
