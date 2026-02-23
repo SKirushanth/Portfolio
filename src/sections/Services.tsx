@@ -1,4 +1,8 @@
 export default function Services() {
+  const scrollToContact = () => {
+    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   return (
     <section id="about" className="px-4 py-8 bg-[#0a0a0a]">
       {/* Top Grid: Title and Main Description */}
@@ -13,12 +17,15 @@ export default function Services() {
         {/* Big Description Card */}
         <div className="md:col-span-8 bg-[#111] p-10 rounded-[2.5rem] border border-white/5 flex flex-col justify-between">
           <p className="text-2xl md:text-3xl text-gray-400 leading-snug">
-            Leveraging modern frameworks, I offer clean, efficient, and scalable 
-            solutions that drive innovation and solve complex engineering challenges.
+            Computer Science student specializing in the MERN stack and AI integration. I build scalable, reliable systems and high-performance applications designed for real-world impact.
           </p>
           <div className="mt-12 flex justify-between items-center">
             <p className="text-gray-500 text-sm font-medium">Let's Build Something Meaningful Together</p>
-            <button className="bg-orange-600 hover:bg-orange-700 transition-colors px-8 py-3 rounded-full text-sm font-bold flex items-center gap-2">
+            <button
+              type="button"
+              onClick={scrollToContact}
+              className="bg-orange-600 hover:bg-orange-700 transition-colors px-8 py-3 rounded-full text-sm font-bold flex items-center gap-2"
+            >
               Let's Build Together <span className="bg-white/20 rounded-full p-1 text-[10px]">→</span>
             </button>
           </div>
@@ -31,17 +38,17 @@ export default function Services() {
           { 
             title: "Web Application Development", 
             sub: "Your brand, defined.", 
-            desc: "Full-stack solutions using React, Node.js, and modern cloud architecture." 
+            desc: "Building high-performance, responsive applications using React.js and Tailwind CSS." 
           },
           { 
             title: "API Design & Integration", 
             sub: "Clarity behind the visuals.", 
-            desc: "Building robust, secure, and scalable REST & GraphQL endpoints." 
+            desc: "Developing React Native mobile apps integrated with LLaMA and Grok AI models." 
           },
           { 
             title: "Cloud Infrastructure & Deployment", 
             sub: "Ongoing expert guidance.", 
-            desc: "Optimizing performance and reliability with AWS and CI/CD pipelines." 
+            desc: "Designing robust REST APIs and database systems using Node.js and Firebase." 
           }
         ].map((service, index) => (
           <div key={index} className="bg-[#111] p-10 rounded-[2.5rem] border border-white/5 hover:border-orange-500/30 transition-all group">

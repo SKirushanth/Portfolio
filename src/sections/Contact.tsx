@@ -75,7 +75,7 @@ export default function Contact() {
             <div className="flex justify-center lg:justify-start gap-3 mt-10">
               {[
                 { Icon: Linkedin, href: "https://www.linkedin.com/in/kirushanth-sathiyaseelan" },
-                { Icon: Github, href: "https://github.com/SKirushanth?tab=repositories" },
+                { Icon: Github, href: "https://github.com/SKirushanth" },
                 { Icon: MessageSquare, href: "#" },
               ].map(({ Icon, href }, i) => (
                 <a
