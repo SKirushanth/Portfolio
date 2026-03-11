@@ -1,5 +1,6 @@
 
 import { useState, useEffect } from 'react';
+import Lenis from 'lenis';
 import Footer from './components/Footer';
 import PillNav from './components/PillNav';
 import Hero from './sections/Hero';
@@ -9,6 +10,40 @@ import Contact from './sections/Contact';
 
 function App() {
   const [activeSection, setActiveSection] = useState('#home');
+
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.05,
+      easing: (t) => 1 - Math.pow(1 - t, 3),
+      smoothWheel: true,
+      touchMultiplier: 1.1,
+    });
+
+    let rafId = 0;
+    const raf = (time: number) => {
+      lenis.raf(time);
+      rafId = requestAnimationFrame(raf);
+    };
+    rafId = requestAnimationFrame(raf);
+
+    const handleAnchorClick = (event: Event) => {
+      const target = event.currentTarget as HTMLAnchorElement | null;
+      const href = target?.getAttribute('href');
+      if (href && href.startsWith('#')) {
+        event.preventDefault();
+        lenis.scrollTo(href);
+      }
+    };
+
+    const anchorLinks = Array.from(document.querySelectorAll('a[href^="#"]'));
+    anchorLinks.forEach((link) => link.addEventListener('click', handleAnchorClick));
+
+    return () => {
+      anchorLinks.forEach((link) => link.removeEventListener('click', handleAnchorClick));
+      cancelAnimationFrame(rafId);
+      lenis.destroy();
+    };
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {

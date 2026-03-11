@@ -5,9 +5,9 @@
   color: white;
 }
 
-/* Smooth scrolling for the entire document */
+/* Lenis handles smooth scrolling */
 html {
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
 }
 
 /* Ensure the font matches the clean sans-serif in your image */
