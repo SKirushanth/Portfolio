@@ -119,16 +119,23 @@ const PillNav: React.FC<PillNavProps> = ({
                   href={item.href}
                   onMouseEnter={() => handleEnter(i, isActive)}
                   onMouseLeave={() => handleLeave(i, isActive)}
-                  className="relative overflow-hidden inline-flex items-center justify-center px-6 py-2 rounded-full font-bold text-[10px] uppercase tracking-[0.2em] transition-all"
+                  className="relative overflow-hidden inline-flex items-center justify-center px-6 py-2 rounded-full font-bold text-[10px] uppercase tracking-[0.2em] transition-all duration-500 ease-out"
                   style={{ 
                     backgroundColor: isActive ? pillColor : 'transparent',
-                    color: isActive ? hoveredPillTextColor : pillTextColor
+                    color: isActive ? hoveredPillTextColor : pillTextColor,
+                    transition: 'background-color 0.5s ease-out, color 0.5s ease-out'
                   }}
                 >
                   <span 
                     ref={el => { circleRefs.current[i] = el; }}
-                    className="absolute left-1/2 bottom-0 rounded-full pointer-events-none"
-                    style={{ background: pillColor, zIndex: 1, visibility: isActive ? 'hidden' : 'visible' }}
+                    className="absolute left-1/2 bottom-0 rounded-full pointer-events-none transition-all duration-500"
+                    style={{ 
+                      background: pillColor, 
+                      zIndex: 1, 
+                      visibility: isActive ? 'hidden' : 'visible',
+                      opacity: isActive ? 0 : 1,
+                      transition: 'opacity 0.5s ease-out, visibility 0.5s ease-out'
+                    }}
                     />
                   
                   {/* Label Stack for the sliding effect */}
@@ -184,10 +191,11 @@ const PillNav: React.FC<PillNavProps> = ({
                       key={item.label}
                       href={item.href}
                       onClick={() => setIsOpen(false)}
-                      className="px-6 py-4 rounded-3xl text-xs uppercase tracking-[0.2em] font-black transition-all text-center"
+                      className="px-6 py-4 rounded-3xl text-xs uppercase tracking-[0.2em] font-black transition-all duration-500 text-center"
                       style={{ 
                         backgroundColor: activeHref === item.href ? pillColor : 'transparent',
-                        color: pillTextColor 
+                        color: pillTextColor,
+                        transition: 'background-color 0.5s ease-out, color 0.5s ease-out'
                       }}
                     >
                       {item.label}

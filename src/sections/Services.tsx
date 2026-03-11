@@ -1,3 +1,5 @@
+import SplitText from '../components/SplitText';
+
 export default function Services() {
   const scrollToContact = () => {
     document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
@@ -11,7 +13,16 @@ export default function Services() {
         {/* Header Card */}
         <div className="md:col-span-4 bg-[#111] p-10 rounded-[2.5rem] border border-white/5 flex flex-col justify-center">
           <p className="text-orange-500 font-bold uppercase text-xs tracking-widest mb-4">Services</p>
-          <h2 className="text-5xl font-bold leading-tight">What I Can Build For You</h2>
+          <SplitText 
+            text="What I Can Build For You"
+            tag="h2"
+            className="text-5xl font-bold leading-tight"
+            splitType="words"
+            delay={30}
+            textAlign="left"
+            from={{ opacity: 0, y: 20 }}
+            to={{ opacity: 1, y: 0 }}
+          />
         </div>
 
         {/* Big Description Card */}

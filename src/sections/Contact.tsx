@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Mail, Phone, Linkedin, Github, Send, MessageSquare, Loader2 } from "lucide-react";
+import SplitText from '../components/SplitText';
 
 export default function Contact() {
   const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
@@ -47,10 +48,28 @@ export default function Contact() {
             <span className="text-[#e85a2d] font-bold text-[10px] md:text-xs uppercase tracking-[0.3em] mb-3 block">
               Get in Touch
             </span>
-            <h2 className="text-[12vw] sm:text-5xl md:text-7xl font-bold text-white tracking-tighter leading-[0.9] mb-6">
-              LET'S START A <br />
-              <span className="text-[#e85a2d] italic">PROJECT</span>
-            </h2>
+            <div className="mb-6">
+              <SplitText 
+                text="LET'S START A"
+                tag="h2"
+                className="text-[12vw] sm:text-5xl md:text-7xl font-bold text-white tracking-tighter leading-[0.9]"
+                splitType="words"
+                delay={50}
+                textAlign="center"
+                from={{ opacity: 0, scale: 0.8, y: 20 }}
+                to={{ opacity: 1, scale: 1, y: 0 }}
+              />
+              <SplitText 
+                text="PROJECT"
+                tag="h2"
+                className="text-[12vw] sm:text-5xl md:text-7xl font-bold text-[#e85a2d] italic tracking-tighter leading-[0.9]"
+                splitType="chars"
+                delay={60}
+                textAlign="center"
+                from={{ opacity: 0, scale: 0.8, rotateX: 90 }}
+                to={{ opacity: 1, scale: 1, rotateX: 0 }}
+              />
+            </div>
             <p className="text-neutral-400 text-sm md:text-lg mb-8 lg:mb-12 max-w-md mx-auto lg:mx-0 leading-relaxed">
               I’m available for freelance and full-time opportunities. Drop a message!
             </p>

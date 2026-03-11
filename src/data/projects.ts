@@ -21,7 +21,7 @@ export const projects: Project[] = [
     id: 3,
     title: "Prestige Estate Agent",
     description: "A luxury real estate platform with high-end property listings.",
-    image: "/estate-agent.jpeg",
+    image: "/estate-agent.png",
     tags: ["Next.js", "Firebase", "Framer Motion"],
     link: "https://estate-agent-zeta.vercel.app",
   }

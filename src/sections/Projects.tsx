@@ -1,4 +1,5 @@
 import { projects } from '../data/projects';
+import SplitText from '../components/SplitText';
 
 export default function Projects() {
   return (
@@ -9,9 +10,15 @@ export default function Projects() {
         {/* Header Grid */}
         <div className="mb-20 text-center">
           <p className="text-orange-500 font-bold uppercase text-xs tracking-widest mb-4">Behind the Designs</p>
-          <h2 className="text-4xl md:text-6xl font-bold leading-tight tracking-tighter">
-            SHAPING EXPERIENCES THAT MAKE LIFE SIMPLER
-          </h2>
+          <SplitText 
+            text="SHAPING EXPERIENCES THAT MAKE LIFE SIMPLER"
+            tag="h2"
+            className="text-4xl md:text-6xl font-bold leading-tight tracking-tighter"
+            splitType="words"
+            delay={40}
+            from={{ opacity: 0, y: 30 }}
+            to={{ opacity: 1, y: 0 }}
+          />
         </div>
 
         {/* Portrait Image Grid - Size Reduced via max-w container */}
