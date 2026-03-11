@@ -4,11 +4,11 @@ import Typewriter from 'typewriter-effect';
 export default function Hero() {
   return (
     <section id="home" className="p-2 md:p-4 min-h-screen">
-      <div className="relative min-h-[95vh] md:h-full w-full bg-gradient-to-br from-[#e85a2d] via-[#b52a1d] to-[#0a0a0a] rounded-[2rem] md:rounded-[3rem] overflow-hidden flex flex-col justify-between p-6 md:p-12">
+      <div className="relative min-h-screen md:h-full w-full bg-gradient-to-br from-[#e85a2d] via-[#b52a1d] to-[#0a0a0a] rounded-[2rem] md:rounded-[3rem] overflow-hidden flex flex-col p-6 md:p-12">
 
         {/* Top utility bar */}
-        <div className="absolute inset-x-0 top-6 z-20 pointer-events-none">
-          <div className="mx-auto max-w-5xl px-6 flex justify-end">
+        <div className="absolute inset-x-0 top-24 md:top-6 z-20 pointer-events-none">
+          <div className="mx-auto max-w-5xl px-4 md:px-6 flex justify-start md:justify-end">
             <div className="pointer-events-auto flex items-center gap-2 rounded-full border border-white/10 bg-[#0a0a0a]/85 backdrop-blur-xl px-2 py-1 shadow-2xl">
               <a
                 href="/Kirushanth_Sathiyaseelan_resume.pdf"
@@ -24,8 +24,9 @@ export default function Hero() {
         </div>
         
         {/* MAIN CONTENT - Adjusted padding for fixed nav */}
-        <div className="relative z-10 grid grid-cols-1 md:grid-cols-12 items-end gap-8 md:gap-12 mb-8 md:mb-12 mt-32 md:mt-24 text-white">
-          <div className="md:col-span-8">
+        <div className="relative z-10 flex-1 flex items-center">
+          <div className="grid grid-cols-1 md:grid-cols-12 items-end gap-8 md:gap-12 mb-12 md:mb-14 mt-12 md:mt-16 text-white w-full">
+            <div className="md:col-span-8">
             <p className="text-lg md:text-2xl font-medium mb-2 opacity-80">Hey, I'm a</p>
             <div className="text-4xl sm:text-5xl md:text-[8vw] font-bold leading-[1.1] md:leading-[0.8] tracking-tighter uppercase min-h-[120px] md:min-h-[1.6em]">
               <Typewriter
@@ -45,13 +46,14 @@ export default function Hero() {
             </div>
           </div>
 
-          <div className="md:col-span-4 max-w-md pb-0 md:pb-4">
-            <h3 className="text-xl md:text-3xl font-bold mb-4 md:mb-6 leading-tight">
-              Great design should <br className="hidden md:block" /> feel invisible.
-            </h3>
-            <p className="text-xs md:text-base opacity-60 leading-relaxed font-light">
-              Engineering scalable systems with a focus on human-centric design. I build digital products that balance performance with aesthetics.
-            </p>
+            <div className="md:col-span-4 max-w-md pb-0 md:pb-4">
+              <h3 className="text-xl md:text-3xl font-bold mb-4 md:mb-6 leading-tight">
+                Great design should <br className="hidden md:block" /> feel invisible.
+              </h3>
+              <p className="text-xs md:text-base opacity-60 leading-relaxed font-light">
+                Engineering scalable systems with a focus on human-centric design. I build digital products that balance performance with aesthetics.
+              </p>
+            </div>
           </div>
         </div>
 
