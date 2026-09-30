@@ -28,7 +28,7 @@ export default function Services() {
         {/* Big Description Card */}
         <div className="md:col-span-8 bg-[#111] p-10 rounded-[2.5rem] border border-white/5 flex flex-col justify-between">
           <p className="text-2xl md:text-3xl text-gray-400 leading-snug">
-            Computer Science student specializing in the MERN stack and AI integration. I build scalable, reliable systems and high-performance applications designed for real-world impact.
+            Computer Science undergraduate specializing in full-stack development with the MERN and Java/Spring stacks, currently building toward DevOps and cloud infrastructure. I build reliable, well-structured applications end to end — from REST APIs and relational databases to responsive front ends — with a growing focus on deployment and system reliability.
           </p>
           <div className="mt-12 flex justify-between items-center">
             <p className="text-gray-500 text-sm font-medium">Let's Build Something Meaningful Together</p>
@@ -48,18 +48,18 @@ export default function Services() {
         {[
           { 
             title: "Web Application Development", 
-            sub: "Your brand, defined.", 
+            sub: "Code that scales.", 
             desc: "Building high-performance, responsive applications using React.js and Tailwind CSS." 
           },
           { 
             title: "API Design & Integration", 
-            sub: "Clarity behind the visuals.", 
+            sub: "Built to work everywhere.", 
             desc: "Developing React Native mobile apps integrated with LLaMA and Grok AI models." 
           },
           { 
             title: "Cloud Infrastructure & Deployment", 
             sub: "Ongoing expert guidance.", 
-            desc: "Designing robust REST APIs and database systems using Node.js and Firebase." 
+            desc: "Containerizing applications with Docker, and growing toward cloud deployment and CI/CD." 
           }
         ].map((service, index) => (
           <div key={index} className="bg-[#111] p-10 rounded-[2.5rem] border border-white/5 hover:border-orange-500/30 transition-all group">

@@ -61,9 +61,9 @@ export default function Hero() {
         <div className="relative z-10 grid grid-cols-2 md:grid-cols-4 gap-4 pt-6 border-t border-white/10 text-white">
           {[
             { num: "01", label: "Full Stack Dev" },
-            { num: "02", label: "UI/UX Architecture" },
-            { num: "03", label: "AI & API Integration" },
-            { num: "04", label: "Backend & Cloud Systems" },
+            { num: "02", label: "Backend & API Design" },
+            { num: "03", label: "Database Systems" },
+            { num: "04", label: "DevOps & Cloud" },
           ].map((item) => (
             <div key={item.num} className="group">
               <span className="text-[9px] md:text-[10px] text-orange-400 font-black block mb-1">#{item.num}</span>
