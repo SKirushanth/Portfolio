@@ -11,7 +11,7 @@ export default function Hero() {
           <div className="mx-auto max-w-5xl px-4 md:px-6 flex justify-start md:justify-end">
             <div className="pointer-events-auto flex items-center gap-2 rounded-full border border-white/10 bg-[#0a0a0a]/85 backdrop-blur-xl px-2 py-1 shadow-2xl">
               <a
-                href="/Kirushanth_Sathiyaseelan_resume.pdf"
+                href="/Kirushanth_CV_Software_Engineer.pdf"
                 download
                 target="_blank"
                 rel="noreferrer"
