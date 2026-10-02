@@ -22,7 +22,7 @@ export default function Projects() {
           <p className="text-sm md:text-base text-white/60 max-w-2xl mx-auto">A few builds that balance clarity, craft, and calm motion.</p>
         </div>
 
-        {/* Portrait Image Grid - Slightly tighter width to shrink cards */}
+        {/* Portrait Image Grid - Cards show image only, description reveals on hover */}
         <div className="max-w-4xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
             {projects.map((project) => (
@@ -31,20 +31,39 @@ export default function Projects() {
                 href={project.link}
                 target="_blank"
                 rel="noreferrer"
-                className="group block h-full cursor-pointer"
+                className="group relative block aspect-[4/5] overflow-hidden rounded-3xl border border-white/10 bg-[#111] backdrop-blur transition-all duration-500 ease-out hover:-translate-y-1.5 hover:border-orange-500/50 cursor-pointer shadow-lg"
               >
-                <div className="flex h-full flex-col rounded-3xl border border-white/10 bg-white/5/50 p-4 md:p-5 backdrop-blur transition-all duration-500 ease-out group-hover:-translate-y-1.5 group-hover:border-orange-500/50">
-                  <div className="relative mb-4 overflow-hidden rounded-2xl border border-white/10 aspect-[4/5]">
-                    <img
-                      src={project.image}
-                      alt={project.title}
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                    />
-                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                  </div>
-                  <div className="space-y-1">
-                    <p className="text-orange-500 text-[10px] font-bold uppercase tracking-widest">{project.description}</p>
-                    <h4 className="text-lg font-semibold text-white group-hover:text-orange-400 transition-colors">{project.title}</h4>
+                {/* Project Image - clean and visible by default */}
+                <img
+                  src={project.image}
+                  alt={project.title}
+                  className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                />
+
+                {/* Hover Overlay - reveals description and details on hover */}
+                <div className="pointer-events-none absolute inset-0 flex flex-col justify-end p-5 md:p-6 bg-gradient-to-t from-black/95 via-black/75 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 ease-out">
+                  <div className="transform translate-y-3 group-hover:translate-y-0 transition-transform duration-500 ease-out space-y-2">
+                    <div className="flex items-center justify-between">
+                      <h4 className="text-lg md:text-xl font-bold text-white group-hover:text-orange-400 transition-colors">
+                        {project.title}
+                      </h4>
+                      <span className="text-orange-400 text-sm font-semibold">↗</span>
+                    </div>
+                    <p className="text-xs md:text-sm text-gray-200/90 leading-relaxed font-light">
+                      {project.description}
+                    </p>
+                    {project.tags && project.tags.length > 0 && (
+                      <div className="flex flex-wrap gap-1.5 pt-1">
+                        {project.tags.map((tag) => (
+                          <span
+                            key={tag}
+                            className="text-[10px] font-medium px-2.5 py-0.5 rounded-full bg-white/15 text-orange-300 border border-white/10 backdrop-blur-sm"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
               </a>
