@@ -6,7 +6,7 @@ export const projects: Project[] = [
     title: "The Reader's Nook",
     description: "Library manager simplifying book organization and borrower tracking.",
     image: "/lb.jpg", // This works because the file is in your public folder
-    tags: ["React", "TypeScript", "Vite"],
+    tags: ["React", "Docker", "Springboot"],
     link: "#",
   },
   {
@@ -24,5 +24,13 @@ export const projects: Project[] = [
     image: "/prestiege.jpg",
     tags: ["Next.js", "Firebase", "Framer Motion"],
     link: "https://estate-agent-zeta.vercel.app",
+  },
+  {
+    id: 4,
+    title: "Next Role",
+    description: "NextRole is a full-stack job application tracker ",
+    image: "/nextrole.png",
+    tags: ["React", "FastAPI", "PostgreSQL", "Docker"],
+    link: "#",
   }
 ];
