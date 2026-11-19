@@ -11,33 +11,6 @@ import './portfolio.css';
 
 const pad = (n: number) => String(n).padStart(2, '0');
 const cardSpring = { type: 'spring', stiffness: 320, damping: 32, mass: 0.9 } as const;
-const nextRoleArtwork = [
-  { part: 'badge', bounds: [40, 48, 520, 64] },
-  { part: 'art', bounds: [738, 140, 402, 430] },
-  { part: 'title', bounds: [56, 528, 620, 136] },
-  { part: 'subtitle', bounds: [56, 683, 365, 24] },
-] as const;
-const centeredArtwork = [
-  { part: 'badge', bounds: [40, 48, 520, 64] },
-  { part: 'art', bounds: [738, 140, 402, 430] },
-  { part: 'title', bounds: [56, 528, 620, 136] },
-  { part: 'subtitle', bounds: [56, 600, 620, 80] },
-] as const;
-
-function ProjectArtwork({ project, reduceMotion }: { project: Project; reduceMotion: boolean | null }) {
-  // The artwork contains outlined text. Crop its existing regions into independent motion targets.
-  const artwork = project.image === '/nextrole.svg' ? nextRoleArtwork : centeredArtwork;
-  return artwork.map(({ part, bounds: [x, y, width, height] }) => (
-    <motion.div key={part} className={`project-artwork-${part}`}
-      layoutId={reduceMotion ? undefined : `card-${part}-${project.id}`} transition={cardSpring}
-      aria-hidden={true}
-      style={{ '--art-x': `${x / 12}%`, '--art-y': `${y / 7.5}%`, '--art-width': `${width / 12}%` } as React.CSSProperties}>
-      <svg viewBox={`${x} ${y} ${width} ${height}`}>
-        <image href={project.image} width="1200" height="750" />
-      </svg>
-    </motion.div>
-  ));
-}
 
 function ProjectDialog({ project, trigger, onClose }: { project: Project; trigger: RefObject<HTMLButtonElement | null>; onClose: () => void }) {
   const card = useRef<HTMLDivElement>(null);
@@ -94,34 +67,36 @@ function ProjectDialog({ project, trigger, onClose }: { project: Project; trigge
         transition={{ duration: reduceMotion ? 0 : 0.2 }} />
       <motion.div layoutRoot className="fixed inset-0 z-50 grid place-items-center p-4 pointer-events-none">
         <motion.div ref={card} role="dialog" aria-modal="true" aria-labelledby="gallery-detail-title"
-          layoutId={reduceMotion ? undefined : `card-container-${project.id}`} layoutScroll transition={cardSpring}
-          className="pointer-events-auto relative w-full max-w-[680px] max-h-[85vh] overflow-y-auto overscroll-contain rounded-3xl bg-[#0A0A0A] border border-white/15 p-8 shadow-[0_32px_90px_rgba(0,0,0,0.9)] text-white"
+          layoutId={reduceMotion ? undefined : `card-container-${project.id}`} transition={cardSpring}
+          className="pointer-events-auto relative w-full max-w-xl overflow-hidden rounded-3xl bg-[#0A0A0A] border border-white/15 shadow-[0_32px_90px_rgba(0,0,0,0.9)] text-white"
           style={{ borderRadius: 24 }}>
           <button ref={closeButton} type="button" onClick={onClose} aria-label="Close project details"
             className="absolute top-6 right-6 z-10 w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center">
             <X size={16} aria-hidden="true" />
           </button>
           <h3 id="gallery-detail-title" className="sr-only">{project.title}</h3>
-          <div className={project.image === '/nextrole.svg' ? 'project-detail-artwork project-detail-nextrole' : 'project-detail-artwork'}>
-            <ProjectArtwork project={project} reduceMotion={reduceMotion} />
-          </div>
-          <motion.div className="mt-5 grid gap-4 border-t border-white/15 pt-5 text-sm text-white/80"
-            initial={{ opacity: 0, y: reduceMotion ? 0 : 12 }} animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: reduceMotion ? 0 : 6 }}
-            transition={{ duration: reduceMotion ? 0 : 0.22, delay: reduceMotion ? 0 : 0.12 }}>
-            <p>{project.description}</p>
-            <ul aria-label="Key features" className="list-disc space-y-1 pl-5">
-              {project.features.map(feature => <li key={feature}>{feature}</li>)}
-            </ul>
-            <ul aria-label="Tech stack" className="flex flex-wrap gap-2">
-              {project.tags.map(tag => <li key={tag} className="rounded-full bg-white/10 px-3 py-1">{tag}</li>)}
-            </ul>
-            <div className="flex flex-wrap gap-4 font-medium text-white underline underline-offset-4">
-              {demo && <a href={demo} target="_blank" rel="noreferrer">Live Demo</a>}
-              <a href={project.github || PROFILE.github} target="_blank" rel="noreferrer">
-                {project.github ? 'GitHub' : 'GitHub profile'}
-              </a>
-            </div>
+          <motion.div layoutScroll className="gallery-detail-scroll" tabIndex={0} role="region" aria-labelledby="gallery-detail-title">
+            <motion.img src={project.image} alt="" width={1200} height={750}
+              layoutId={reduceMotion ? undefined : `card-art-${project.id}`} transition={cardSpring}
+              className="block h-auto w-full" />
+            <motion.div className="grid gap-3 border-t border-white/15 p-5 text-sm text-white/80 sm:p-6"
+              initial={{ opacity: 0, y: reduceMotion ? 0 : 12 }} animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: reduceMotion ? 0 : 6 }}
+              transition={{ duration: reduceMotion ? 0 : 0.22, delay: reduceMotion ? 0 : 0.12 }}>
+              <p>{project.description}</p>
+              <ul aria-label="Key features" className="list-disc space-y-1 pl-5">
+                {project.features.map(feature => <li key={feature}>{feature}</li>)}
+              </ul>
+              <ul aria-label="Tech stack" className="flex flex-wrap gap-2">
+                {project.tags.map(tag => <li key={tag} className="rounded-full bg-white/10 px-3 py-1">{tag}</li>)}
+              </ul>
+              <div className="flex flex-wrap gap-4 font-medium text-white underline underline-offset-4">
+                {demo && <a href={demo} target="_blank" rel="noreferrer">Live Demo</a>}
+                <a href={project.github || PROFILE.github} target="_blank" rel="noreferrer">
+                  {project.github ? 'GitHub' : 'GitHub profile'}
+                </a>
+              </div>
+            </motion.div>
           </motion.div>
         </motion.div>
       </motion.div>
@@ -224,9 +199,9 @@ export default function Portfolio() {
                 <div className="gallery-plane">
                   <motion.div className="gallery-card" style={{ borderRadius: 20 }}
                     layoutId={reduceMotion ? undefined : `card-container-${item.id}`} transition={cardSpring}>
-                    <div className="gallery-card-artwork" aria-hidden="true">
-                      <ProjectArtwork project={item} reduceMotion={reduceMotion} />
-                    </div>
+                    <motion.img src={item.image} alt="" width={1200} height={750}
+                      className="gallery-card-artwork"
+                      layoutId={reduceMotion ? undefined : `card-art-${item.id}`} transition={cardSpring} />
                     {item.id === currentProject.id && (
                       <button type="button" className="gallery-card-trigger" aria-haspopup="dialog"
                         aria-label={`View ${item.title} project`} onClick={openProject} />
