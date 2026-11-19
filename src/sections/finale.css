@@ -1,0 +1,123 @@
+.studio-finale {
+  --studio-serif: "Baskervville", "Iowan Old Style", Georgia, serif;
+  --scene-progress: 0;
+  --stem: clamp(0, calc(var(--scene-progress) * 5), 1);
+  --top-edge: clamp(0, calc((var(--scene-progress) - .2) * 4), 1);
+  --dividers: clamp(0, calc((var(--scene-progress) - .283) * 4), 1);
+  --sides: clamp(0, calc((var(--scene-progress) - .45) * 5), 1);
+  --bottom-edge: clamp(0, calc((var(--scene-progress) - .65) * 6.25), 1);
+  --content: clamp(0, calc((var(--scene-progress) - .81) * 8.34), 1);
+  position: relative;
+  height: 255svh;
+  color: #fff;
+  background: #10256b;
+}
+
+.studio-stage {
+  position: sticky;
+  top: 0;
+  min-height: 100svh;
+  isolation: isolate;
+  overflow: hidden;
+  background: var(--studio-background);
+}
+
+.fm .studio-services h2 {
+  font-family: var(--studio-serif);
+  font-weight: 400;
+  line-height: 1.04;
+  letter-spacing: -.05em;
+  text-align: center;
+  text-wrap: balance;
+}
+
+.fm .studio-services {
+  width: min(90%, 1296px);
+  margin-inline: auto;
+  padding-bottom: 45px;
+}
+
+.fm .studio-services h2 {
+  height: 50svh;
+  display: grid;
+  align-content: center;
+  margin-inline: auto;
+  padding-top: 46px;
+  max-width: 23ch;
+  font-size: clamp(1.9rem, min(5.4vw, 7.4svh), 5.4rem);
+}
+
+.studio-cards {
+  position: relative;
+}
+
+.studio-thread {
+  position: absolute;
+  left: 50%;
+  bottom: 100%;
+  width: 2px;
+  height: min(12svh, 110px);
+  background: #fff;
+  transform: translateX(-50%) scaleY(var(--stem));
+  clip-path: inset(calc(var(--sides) * 100%) 0 0);
+  transform-origin: top;
+}
+
+.studio-wire {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.studio-wire i {
+  position: absolute;
+  display: block;
+  background: #fff;
+}
+
+.wire-top { inset: 0 0 auto; height: 2px; transform: scaleX(var(--top-edge)); }
+.wire-side, .wire-divider { top: 0; bottom: 0; width: 2px; transform-origin: top; }
+.wire-side { transform: scaleY(var(--sides)); }
+.wire-divider { transform: scaleY(var(--dividers)); }
+.wire-first { left: 33.3333%; }
+.wire-second { left: 66.6667%; }
+.wire-left { left: 0; }
+.wire-right { right: 0; }
+.wire-bottom { bottom: 0; width: 50%; height: 2px; transform: scaleX(var(--bottom-edge)); }
+.wire-bottom.wire-left { transform-origin: left; }
+.wire-bottom.wire-right { transform-origin: right; }
+
+.fm .studio-disciplines {
+  opacity: var(--content);
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  min-height: min(35svh, 350px);
+  list-style: none;
+}
+
+.fm .studio-disciplines li {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  justify-items: start;
+  align-items: center;
+  padding: clamp(10px, 2.4vw, 40px);
+  gap: clamp(8px, 2svh, 24px);
+}
+
+.studio-index {
+  font: 400 clamp(.62rem, .85vw, .8rem)/1.3 "IBM Plex Mono", Consolas, monospace;
+  letter-spacing: .12em;
+}
+
+.studio-disciplines svg {
+  width: clamp(36px, min(7vw, 11svh), 110px);
+  height: auto;
+}
+
+.fm .studio-disciplines p {
+  max-width: 24ch;
+  font-size: clamp(.84rem, 1.75vw, 1.75rem);
+  line-height: 1.26;
+  letter-spacing: -.025em;
+  overflow-wrap: anywhere;
+}

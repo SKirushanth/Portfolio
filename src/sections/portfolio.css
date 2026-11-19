@@ -1,0 +1,281 @@
+.fm .project-gallery {
+  position: relative;
+  color: white;
+  background: #080c18;
+}
+
+.gallery-frame {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+  isolation: isolate;
+  --card-width: min(57vw, 84svh);
+  --card-height: calc(var(--card-width) * .625);
+}
+
+/* Seamless top transition receiving scroll from Showcase */
+.gallery-frame::after {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 25%;
+  pointer-events: none;
+  background: linear-gradient(180deg, #080c18 0%, rgba(8, 12, 24, 0.6) 60%, transparent 100%);
+  z-index: 3;
+}
+
+/* Blend the last slide into the top edge of Contact. */
+.gallery-exit {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 30%;
+  pointer-events: none;
+  background: linear-gradient(0deg, var(--project-contact-seam), transparent);
+  opacity: 0;
+}
+
+.gallery-glow {
+  position: absolute;
+  inset: 0;
+  transition: opacity 0.55s ease;
+}
+
+.gallery-aura {
+  position: absolute;
+  inset: 0;
+  background: var(--ambient, #281d45);
+  mask-image: radial-gradient(ellipse at 50% 55%, rgba(0, 0, 0, 0.8), transparent 74%);
+  transition: background-color 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ANIMATED & SPACED GALLERY HEADER */
+.gallery-header {
+  position: absolute;
+  z-index: 10;
+  top: max(10svh, 82px);
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  pointer-events: none;
+  text-align: center;
+  padding: 0 4vw;
+}
+
+.gallery-title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: clamp(0.15rem, 0.6vw, 0.4rem);
+  font-size: clamp(2.4rem, 5.2vw, 4.6rem);
+  font-weight: 650;
+  line-height: 1.05;
+  letter-spacing: clamp(0.1em, 0.22em, 0.28em);
+  text-transform: uppercase;
+  margin: 0;
+  pointer-events: auto;
+}
+
+.gallery-char {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(32px) scale(0.9);
+  transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+              color 0.3s ease;
+  transition-delay: calc(var(--i, 0) * 45ms + 120ms);
+  color: #ffffff;
+  cursor: default;
+}
+
+.gallery-char:hover {
+  transform: translateY(-4px) scale(1.1);
+  color: #38bdf8;
+  filter: drop-shadow(0 0 14px rgba(56, 189, 248, 0.75));
+}
+
+.entered .gallery-char {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* 3D STAGE & CARDS */
+.gallery-rail {
+  display: block;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+}
+
+.gallery-item {
+  display: contents;
+}
+
+.gallery-plane {
+  position: absolute;
+  left: 50%;
+  top: calc(50% + 44px);
+}
+
+.gallery-plane {
+  z-index: 1;
+  width: var(--card-width);
+  height: var(--card-height);
+  pointer-events: none;
+  transform-style: preserve-3d;
+  transform: translate(-50%, -50%);
+}
+
+.gallery-card {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #0a0a0a;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.12);
+}
+
+.gallery-card-artwork {
+  position: absolute;
+  inset: 0;
+}
+
+.gallery-card-artwork > div {
+  position: absolute;
+  top: var(--art-y);
+  left: var(--art-x);
+  width: var(--art-width);
+}
+
+.gallery-card-artwork svg,
+.project-detail-artwork svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: hidden;
+}
+
+.gallery-card-trigger {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  border-radius: inherit;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.gallery-card-trigger:focus-visible {
+  outline: 2px solid white;
+  outline-offset: -4px;
+}
+
+/* SIDE CONTROLS */
+.gallery-count, .fm .gallery-open {
+  position: absolute;
+  z-index: 10;
+  top: calc(50% + 44px);
+  transform: translateY(-50%);
+  font-size: clamp(0.75rem, 1vw, 0.95rem);
+}
+
+.gallery-count {
+  left: 4.5vw;
+  color: #d3d4da;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.08em;
+  font-weight: 500;
+}
+
+.fm .gallery-open {
+  right: 4.5vw;
+  background: rgba(19, 20, 23, 0.85);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 100px;
+  padding: 0.75em 1.25em;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  cursor: pointer;
+  letter-spacing: -0.01em;
+  transition: transform 0.3s var(--ease), background 0.3s, border-color 0.3s;
+}
+
+.fm .gallery-open:hover {
+  transform: translateY(-50%) translateY(-2px);
+  background: rgba(31, 34, 42, 0.95);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* EXPANDED PROJECT ARTWORK */
+.project-detail-artwork {
+  display: grid;
+  padding-block-start: 24px;
+}
+
+.project-detail-nextrole {
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  grid-template-areas: 'badge art' 'title art' 'subtitle art';
+  align-items: center;
+  gap: 8px 16px;
+}
+
+.project-detail-nextrole .project-artwork-badge {
+  grid-area: badge;
+  width: min(100%, 112px);
+  align-self: start;
+}
+
+.project-detail-nextrole .project-artwork-art { grid-area: art; }
+.project-detail-nextrole .project-artwork-title { grid-area: title; align-self: end; }
+.project-detail-nextrole .project-artwork-subtitle { grid-area: subtitle; width: min(100%, 228px); }
+
+@media (max-width: 480px) {
+  .project-detail-nextrole {
+    grid-template-areas: 'badge art' 'title title' 'subtitle subtitle';
+  }
+}
+
+/* RESPONSIVE ADJUSTMENTS */
+@media (max-width: 740px) {
+  .gallery-frame {
+    --card-width: 89vw;
+  }
+  .gallery-header {
+    top: max(9svh, 74px);
+    gap: 8px;
+  }
+  .gallery-title {
+    font-size: clamp(1.8rem, 8vw, 2.6rem);
+    letter-spacing: 0.15em;
+  }
+  .gallery-plane {
+    top: calc(50% + 40px);
+  }
+  .gallery-count {
+    top: calc(50% + var(--card-height) / 2 + 54px);
+    background: rgba(16, 17, 22, 0.9);
+    border-radius: 24px;
+    padding: 0.55em 0.9em;
+    left: 5%;
+  }
+  .fm .gallery-open {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gallery-glow, .gallery-char {
+    transition: none;
+    opacity: 1;
+    filter: none;
+    transform: none;
+  }
+  .gallery-aura {
+    transition: none;
+  }
+}

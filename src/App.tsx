@@ -1,109 +1,51 @@
-
-import { useState, useEffect } from 'react';
-import Lenis from 'lenis';
-import Footer from './components/Footer';
-import PillNav from './components/PillNav';
+import { useEffect, useRef } from 'react';
+import './momentum.css';
+import { useReveal } from './hooks/useReveal';
+import { useScrollEngine } from './hooks/useScrollEngine';
 import Hero from './sections/Hero';
-import Projects from './sections/Projects';
-import Services from './sections/Services';
+import Navbar from './components/Navbar';
+import Showcase from './sections/Showcase';
+import { PROFILE } from './data/content';
+import Portfolio from './sections/Portfolio';
 import Contact from './sections/Contact';
+import Disciplines from './sections/Disciplines';
+import Footer from './sections/Footer';
 
-function App() {
-  const [activeSection, setActiveSection] = useState('#home');
+export default function App() {
+  const root = useRef<HTMLDivElement>(null);
+
+  useReveal(root);
+  useScrollEngine(root);
 
   useEffect(() => {
-    const lenis = new Lenis({
-      duration: 1.05,
-      easing: (t) => 1 - Math.pow(1 - t, 3),
-      smoothWheel: true,
-      touchMultiplier: 1.1,
-    });
+    const html = document.documentElement;
+    const previousTitle = document.title;
+    const previousScroll = html.style.scrollBehavior;
 
-    let rafId = 0;
-    const raf = (time: number) => {
-      lenis.raf(time);
-      rafId = requestAnimationFrame(raf);
-    };
-    rafId = requestAnimationFrame(raf);
-
-    const handleAnchorClick = (event: Event) => {
-      const target = event.currentTarget as HTMLAnchorElement | null;
-      const href = target?.getAttribute('href');
-      if (href && href.startsWith('#')) {
-        event.preventDefault();
-        lenis.scrollTo(href);
-      }
-    };
-
-    const anchorLinks = Array.from(document.querySelectorAll('a[href^="#"]'));
-    anchorLinks.forEach((link) => link.addEventListener('click', handleAnchorClick));
+    document.title = `${PROFILE.name} · Software Engineer`;
+    html.style.scrollBehavior = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      ? 'auto'
+      : 'smooth';
 
     return () => {
-      anchorLinks.forEach((link) => link.removeEventListener('click', handleAnchorClick));
-      cancelAnimationFrame(rafId);
-      lenis.destroy();
+      document.title = previousTitle;
+      html.style.scrollBehavior = previousScroll;
     };
-  }, []);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const sections = ['home', 'about', 'projects', 'contact'];
-      const scrollPosition = window.scrollY + window.innerHeight / 3;
-
-      for (const sectionId of sections) {
-        const element = document.getElementById(sectionId);
-        if (element) {
-          const { offsetTop, offsetHeight } = element;
-          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
-            setActiveSection(`#${sectionId}`);
-            break;
-          }
-        }
-      }
-    };
-
-    // Throttle scroll events for better performance
-    let ticking = false;
-    const scrollListener = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          handleScroll();
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
-
-    window.addEventListener('scroll', scrollListener);
-    handleScroll(); // Call once on mount
-    return () => window.removeEventListener('scroll', scrollListener);
   }, []);
 
   return (
-    <main className="bg-[#0a0a0a] min-h-screen">
-      <PillNav
-        items={[
-          { label: 'Home', href: '#home' },
-          { label: 'About', href: '#about' },
-          { label: 'Projects', href: '#projects' },
-          { label: 'Contact', href: '#contact' }
-        ]}
-        activeHref={activeSection}
-        baseColor="#0a0a0a"
-        pillColor="#e85a2d"
-        pillTextColor="#ffffff"
-        hoveredPillTextColor="#0a0a0a"
-      />
-      <div className="max-w-350 mx-auto">
-        <Hero />
-        <Services />
-        <Projects />
-        <Contact />
-        <Footer />
-        
+    <div className="fm" ref={root}>
+      <Navbar />
+      <div className="home-sequence">
+        <div className="home-opening">
+          <Hero />
+        </div>
+        <Showcase />
       </div>
-    </main>
+      <Disciplines />
+      <Portfolio />
+      <Contact />
+      <Footer />
+    </div>
   );
 }
-
-export default App;

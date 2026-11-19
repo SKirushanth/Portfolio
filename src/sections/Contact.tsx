@@ -1,203 +1,94 @@
-import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Mail, Phone, Linkedin, Github, Send, MessageSquare, Loader2 } from "lucide-react";
-import SplitText from '../components/SplitText';
+import { gsap } from 'gsap';
+import { useState, useRef, useLayoutEffect } from 'react';
+import type { FormEvent } from 'react';
+import { PROFILE } from '../data/content';
+import type { CSSVars } from '../types';
+
+type Status = 'idle' | 'sending' | 'success' | 'error';
+const d = (n: number): CSSVars => ({ '--d': n });
+
+const Icon = {
+  mail: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="16" x="2" y="4" rx="2" /><path d="m22 7-10 6L2 7" /></svg>,
+  phone: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z" /></svg>,
+  github: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" /><path d="M9 18c-4.51 2-5-2-7-2" /></svg>,
+  linkedin: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" /><rect width="4" height="12" x="2" y="9" /><circle cx="4" cy="4" r="2" /></svg>,
+  instagram: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5" /><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" /><line x1="17.5" x2="17.51" y1="6.5" y2="6.5" /></svg>,
+};
 
 export default function Contact() {
-  const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
+  const [status, setStatus] = useState<Status>('idle');
+  const section = useRef<HTMLElement>(null);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  useLayoutEffect(() => {
+    const media = gsap.matchMedia();
+    media.add('(prefers-reduced-motion: no-preference)', () => {
+      const host = section.current!;
+      gsap.fromTo(host.querySelector('.cform'), { y: 42 }, {
+        y: 0, ease: 'none',
+        scrollTrigger: { trigger: host, start: 'top bottom', end: 'top 30%', scrub: true }
+      });
+      gsap.fromTo(host.querySelector('.contact-flow'), { xPercent: -24 }, {
+        xPercent: 24,
+        ease: 'none',
+        scrollTrigger: { trigger: host, start: 'top bottom', end: 'top 25%', scrub: true },
+      });
+    });
+    return () => media.revert();
+  }, []);
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const form = e.currentTarget;
     setStatus('sending');
-
-    const formData = new FormData(e.currentTarget);
-    const body = Object.fromEntries(formData);
-
+    const body = Object.fromEntries(new FormData(form));
     try {
       const res = await fetch('/api/send', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
       });
-
       if (res.ok) {
         setStatus('success');
-        (e.target as HTMLFormElement).reset();
-        
-        // Reset status back to idle after 5 seconds to clear the message
+        form.reset();
         setTimeout(() => setStatus('idle'), 5000);
-      } else {
-        setStatus('error');
-      }
+      } else setStatus('error');
     } catch (err) {
-      console.error("Submission error:", err);
+      console.error('Submission error:', err);
       setStatus('error');
     }
   };
 
   return (
-    <section id="contact" className="bg-[#0a0a0a] py-16 md:py-24 px-5 relative overflow-hidden">
-      {/* Background Glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-75 bg-[#e85a2d]/10 rounded-full blur-[100px] pointer-events-none opacity-50 md:opacity-100" />
-
-      <div className="max-w-6xl mx-auto relative z-10">
-        <div className="flex flex-col lg:grid lg:grid-cols-2 gap-12 lg:gap-16">
-          
-          {/* Left Side: Info */}
-          <div className="text-center lg:text-left">
-            <span className="text-[#e85a2d] font-bold text-[10px] md:text-xs uppercase tracking-[0.3em] mb-3 block">
-              Get in Touch
-            </span>
-            <div className="mb-6">
-              <SplitText 
-                text="LET'S START A"
-                tag="h2"
-                className="text-[12vw] sm:text-5xl md:text-7xl font-bold text-white tracking-tighter leading-[0.9]"
-                splitType="words"
-                delay={50}
-                textAlign="center"
-                from={{ opacity: 0, scale: 0.8, y: 20 }}
-                to={{ opacity: 1, scale: 1, y: 0 }}
-              />
-              <SplitText 
-                text="PROJECT"
-                tag="h2"
-                className="text-[12vw] sm:text-5xl md:text-7xl font-bold text-[#e85a2d] italic tracking-tighter leading-[0.9]"
-                splitType="chars"
-                delay={60}
-                textAlign="center"
-                from={{ opacity: 0, scale: 0.8, rotateX: 90 }}
-                to={{ opacity: 1, scale: 1, rotateX: 0 }}
-              />
-            </div>
-            <p className="text-neutral-400 text-sm md:text-lg mb-8 lg:mb-12 max-w-md mx-auto lg:mx-0 leading-relaxed">
-              I’m available for freelance and full-time opportunities. Drop a message!
-            </p>
-
-            {/* Contact Details */}
-            <div className="flex flex-col items-center lg:items-start gap-4 md:gap-6">
-              <a href="mailto:kirushanth.20233050@iit.ac.lk" className="flex items-center gap-3 md:gap-4 group">
-                <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-[#131314] flex items-center justify-center border border-white/5 group-hover:border-[#e85a2d]/50 transition-colors">
-                  <Mail className="w-4 h-4 md:w-5 md:h-5 text-[#e85a2d]" />
-                </div>
-                <span className="text-white text-sm md:text-base font-medium">kirushanth.20233050@iit.ac.lk</span>
-              </a>
-              <div className="flex items-center gap-3 md:gap-4">
-                <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-[#131314] flex items-center justify-center border border-white/5">
-                  <Phone className="w-4 h-4 md:w-5 md:h-5 text-[#e85a2d]" />
-                </div>
-                <span className="text-white text-sm md:text-base font-medium">+94 70 139 6579</span>
-              </div>
-            </div>
-
-            {/* Social Icons */}
-            <div className="flex justify-center lg:justify-start gap-3 mt-10">
-              {[
-                { Icon: Linkedin, href: "https://www.linkedin.com/in/kirushanth-sathiyaseelan" },
-                { Icon: Github, href: "https://github.com/SKirushanth" },
-                { Icon: MessageSquare, href: "#" },
-              ].map(({ Icon, href }, i) => (
-                <a
-                  key={i}
-                  href={href}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="w-11 h-11 md:w-12 md:h-12 rounded-xl bg-[#131314] border border-white/5 flex items-center justify-center text-neutral-400 hover:text-[#e85a2d] transition-all"
-                >
-                  <Icon className="w-5 h-5" />
-                </a>
-              ))}
-            </div>
+    <section ref={section} className="contact" id="contact">
+      <div className="contact-flow" aria-hidden="true" />
+      <div className="contact-in">
+        <div className="contact-info">
+          <div className="label rv">Get in touch</div>
+          <h2 className="rv" style={d(1)}>Let's start a <em>project</em></h2>
+          <p className="rv" style={d(2)}>I'm available for freelance and full-time opportunities. Drop a message!</p>
+          <a className="row rv" style={d(3)} href={`mailto:${PROFILE.email}`}><span className="ic">{Icon.mail}</span>{PROFILE.email}</a>
+          <div className="row rv" style={d(4)}><span className="ic">{Icon.phone}</span>{PROFILE.phone}</div>
+          <div className="socials rv" style={d(5)}>
+            <a href={PROFILE.linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn">{Icon.linkedin}</a>
+            <a href={PROFILE.github} target="_blank" rel="noreferrer" aria-label="GitHub">{Icon.github}</a>
+            <a href={PROFILE.instagram} target="_blank" rel="noreferrer" aria-label="Instagram">{Icon.instagram}</a>
           </div>
-
-          {/* Right Side: Form */}
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="bg-[#131314] p-6 sm:p-10 md:p-12 rounded-4xl md:rounded-[2.5rem] border border-white/5 shadow-2xl mt-4 lg:mt-0"
-          >
-            <form onSubmit={handleSubmit} className="space-y-5 md:space-y-6">
-              <div className="space-y-4 md:space-y-0 md:grid md:grid-cols-2 md:gap-6">
-                <div className="space-y-2">
-                  <label className="text-[9px] md:text-[10px] uppercase tracking-widest text-neutral-500 font-bold ml-1">Name</label>
-                  <input 
-                    name="name"
-                    type="text" 
-                    required 
-                    placeholder="Your Name"
-                    className="w-full bg-[#0a0a0a] border border-white/10 rounded-xl px-4 py-3 md:py-4 text-white focus:outline-none focus:border-[#e85a2d] transition-all text-sm"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-[9px] md:text-[10px] uppercase tracking-widest text-neutral-500 font-bold ml-1">Email</label>
-                  <input 
-                    name="email"
-                    type="email" 
-                    required 
-                    placeholder="Email"
-                    className="w-full bg-[#0a0a0a] border border-white/10 rounded-xl px-4 py-3 md:py-4 text-white focus:outline-none focus:border-[#e85a2d] transition-all text-sm"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-[9px] md:text-[10px] uppercase tracking-widest text-neutral-500 font-bold ml-1">Message</label>
-                <textarea 
-                  name="message"
-                  rows={4} 
-                  required 
-                  placeholder="Tell me about your project..."
-                  className="w-full bg-[#0a0a0a] border border-white/10 rounded-xl px-4 py-3 md:py-4 text-white focus:outline-none focus:border-[#e85a2d] transition-all text-sm resize-none"
-                />
-              </div>
-
-              <button 
-                type="submit" 
-                disabled={status === 'sending'}
-                className="w-full bg-[#e85a2d] disabled:bg-neutral-800 text-black font-bold py-4 md:py-5 rounded-xl flex items-center justify-center gap-2 hover:bg-[#ff6b3d] transition-all active:scale-[0.98] text-sm md:text-base disabled:cursor-not-allowed"
-              >
-                {status === 'sending' ? (
-                  <>
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                    SENDING...
-                  </>
-                ) : (
-                  <>
-                    SEND MESSAGE
-                    <Send className="w-4 h-4" />
-                  </>
-                )}
-              </button>
-
-              {/* Status Feedback */}
-              <div className="min-h-[20px] text-center">
-                <AnimatePresence mode="wait">
-                  {status === 'success' && (
-                    <motion.p 
-                      initial={{ opacity: 0, y: 5 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0 }}
-                      className="text-green-500 text-[10px] font-bold uppercase tracking-[0.2em]"
-                    >
-                      Message sent successfully!
-                    </motion.p>
-                  )}
-                  {status === 'error' && (
-                    <motion.p 
-                      initial={{ opacity: 0, y: 5 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0 }}
-                      className="text-red-500 text-[10px] font-bold uppercase tracking-[0.2em]"
-                    >
-                      Something went wrong. Try again.
-                    </motion.p>
-                  )}
-                </AnimatePresence>
-              </div>
-            </form>
-          </motion.div>
         </div>
+
+        <form className="cform" onSubmit={handleSubmit}>
+          <div className="two">
+            <label>Name<input name="name" type="text" required placeholder="Your Name" /></label>
+            <label>Email<input name="email" type="email" required placeholder="Email" /></label>
+          </div>
+          <label>Message<textarea name="message" rows={4} required placeholder="Tell me about your project..." /></label>
+          <button type="submit" className="pill white send" disabled={status === 'sending'}>
+            {status === 'sending' ? 'SENDING...' : <>SEND MESSAGE <span className="arr">→</span></>}
+          </button>
+          <p className={`status ${status}`} role="status">
+            {status === 'success' && 'Message sent successfully!'}
+            {status === 'error' && 'Something went wrong. Please try again or email me directly.'}
+          </p>
+        </form>
       </div>
     </section>
   );

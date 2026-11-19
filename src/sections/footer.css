@@ -1,0 +1,114 @@
+.fm .footer-reveal {
+  position: relative;
+  padding-top: clamp(16px, 3vw, 36px);
+  background: #050508;
+  overflow: clip;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .footer-reveal:not(:focus-within) .foot {
+    transform: translateY(var(--footer-offset, 0px));
+  }
+}
+
+.fm .foot {
+  --footer-accent: color-mix(in srgb, var(--blue) 40%, white);
+  container-type: inline-size;
+  overflow: hidden;
+  padding: clamp(24px, 3vw, 36px) clamp(16px, 6vw, 112px) 0;
+  background: radial-gradient(ellipse 58% 50% at 50% 108%,
+    color-mix(in srgb, var(--blue) 55%, transparent), transparent), #131314;
+  color: #f4f6fb;
+  border-radius: 24px 24px 0 0;
+}
+
+.fm .foot-top {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, .55fr) minmax(0, 1fr);
+  gap: clamp(18px, 4vw, 56px);
+}
+
+.fm .foot .logo {
+  display: inline-flex;
+}
+
+.fm .foot .tag {
+  margin-top: 1rem;
+  color: #c3c6d0;
+  max-width: 39ch;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.fm .foot-socials {
+  display: flex;
+  gap: 4px;
+  margin-top: 1rem;
+}
+
+.fm .foot-socials a {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  justify-items: start;
+  color: #f4f6fb;
+}
+
+.fm .foot-socials a:hover {
+  color: var(--footer-accent);
+}
+
+.fm .foot h3 {
+  font-size: 0.9rem;
+  color: #f4f6fb;
+  margin-bottom: 0.85rem;
+  font-weight: 600;
+}
+
+.fm .foot ul {
+  list-style: none;
+  display: grid;
+  gap: 0.7rem;
+  font-size: 0.9rem;
+  color: #c3c6d0;
+  overflow-wrap: anywhere;
+}
+
+.fm .foot ul a:hover {
+  color: var(--footer-accent);
+}
+
+.fm .foot a:focus-visible {
+  outline: 2px solid var(--footer-accent);
+  outline-offset: 3px;
+}
+
+.fm .foot-bot {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  font-size: 0.82rem;
+  color: #c3c6d0;
+  border-top: 1px solid rgb(255 255 255 / 16%);
+  padding-top: 0.75rem;
+  margin-top: clamp(20px, 3vw, 32px);
+}
+
+.fm .foot-signature {
+  margin-top: clamp(14px, 2vw, 24px);
+  font-size: min(17cqw, 11rem);
+  font-weight: 800;
+  line-height: 0.76;
+  letter-spacing: -0.055em;
+  text-align: center;
+  white-space: nowrap;
+  color: transparent;
+  -webkit-text-stroke: 1px color-mix(in srgb, var(--blue) 75%, white);
+}
+
+@media (max-width: 900px) {
+  .fm .foot-top { grid-template-columns: minmax(0, .75fr) minmax(0, 1.25fr); }
+  .fm .foot-top > div:first-child { grid-column: 1 / -1; }
+}
