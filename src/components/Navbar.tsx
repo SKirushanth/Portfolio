@@ -3,6 +3,7 @@ import { Menu, X } from 'lucide-react';
 import { PROFILE } from '../data/content';
 
 export default function Navbar() {
+  const [overAbout, setOverAbout] = useState(false);
   const [compact, setCompact] = useState(false);
   const [overFinale, setOverFinale] = useState(false);
   const [open, setOpen] = useState(false);
@@ -11,7 +12,10 @@ export default function Navbar() {
 
   useEffect(() => {
     const finale = document.getElementById('connect');
+    const about = document.getElementById('about');
+    const sheet = about?.querySelector('.about-next-sheet');
     const update = () => {
+      if (about && sheet) setOverAbout(about.getBoundingClientRect().top <= 44 && sheet.getBoundingClientRect().top > 44);
       setCompact(window.scrollY > 80);
       if (finale) {
         const { top, bottom } = finale.getBoundingClientRect();
@@ -43,7 +47,7 @@ export default function Navbar() {
   }, [open]);
 
   return (
-    <nav ref={nav} className="nav" data-compact={compact} data-finale={overFinale} aria-label="Main navigation"
+    <nav ref={nav} className="nav" data-about={overAbout} data-compact={compact} data-finale={overFinale} aria-label="Main navigation"
       onBlur={event => {
         if (!event.currentTarget.contains(event.relatedTarget)) setOpen(false);
       }}
@@ -53,7 +57,7 @@ export default function Navbar() {
           setOpen(false);
         }
       }}>
-      <a className="logo" href="#top" onClick={() => setOpen(false)}><i />{PROFILE.name}</a>
+      <a className="logo" href="#top" onClick={() => setOpen(false)}><i aria-hidden="true" />{PROFILE.name}</a>
       <button className="nav-toggle" ref={toggle} type="button" aria-controls="nav-links"
         aria-expanded={open} aria-label={open ? 'Close navigation' : 'Open navigation'}
         onClick={() => setOpen(value => !value)}>

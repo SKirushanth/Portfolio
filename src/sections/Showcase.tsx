@@ -1,26 +1,8 @@
 import { Atom, FileCode2, Hexagon, Leaf, Database, Container, Zap, Waves, Triangle, Coffee, Code2, Activity, Sprout, Flame, Braces, Cloud } from 'lucide-react';
-import { Fragment, useLayoutEffect, useRef } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useLayoutEffect, useRef, type ReactNode } from 'react';
+import { observeSectionScroll } from '../hooks/observeSectionScroll';
 import LogoLoop, { type LogoItem } from '../components/LogoLoop';
 import './showcase.css';
-
-gsap.registerPlugin(ScrollTrigger);
-
-const images = {
-
-  BENTO_CARD_1_BG_IMG: '/hero-center.svg',
-  BENTO_CARD_2_BG_IMG: '/hero-2.svg',
-  BENTO_CARD_3_BG_IMG: '/servers.svg',
-  AVATAR_1: '/nextrole.svg',
-  AVATAR_2: '/mineo.svg',
-  AVATAR_3: '/lb.svg',
-  AVATAR_4: '/prestiege.svg',
-};
-
-type ImageSlot = keyof typeof images;
-
-const avatars: ImageSlot[] = ['AVATAR_1', 'AVATAR_2', 'AVATAR_3', 'AVATAR_4'];
 
 const techLogos: LogoItem[] = [
   { title: 'React', Icon: Atom, color: '#087e9b' },
@@ -45,45 +27,6 @@ const techLogos: LogoItem[] = [
   hoverColor: color,
 }));
 
-function Artwork({ slot, className = '' }: { slot: ImageSlot; className?: string }) {
-  return (
-    <div className={`pi-art ${className}`} data-placeholder={slot} aria-hidden="true">
-      {images[slot] && <img src={images[slot]} alt="" />}
-    </div>
-  );
-}
-
-function ChartBadge() {
-  return (
-    <span className="pi-chart" aria-hidden="true">
-      <i /><i /><i />
-    </span>
-  );
-}
-
-// Keep each word together when a character-animated heading wraps.
-function SplitText({ text, words = false }: { text: string; words?: boolean }) {
-  return (
-    <>
-      <span className="sr-only">{text}</span>
-      <span aria-hidden="true">
-        {text.split(' ').map((word, index) => (
-          <Fragment key={index}>
-            {index > 0 && ' '}
-            <span className="pi-word">
-              {words ? (
-                <span data-piece>{word}</span>
-              ) : (
-                Array.from(word, (letter, i) => <span data-piece key={i}>{letter}</span>)
-              )}
-            </span>
-          </Fragment>
-        ))}
-      </span>
-    </>
-  );
-}
-
 function TechnologyMarquee() {
   return (
     <div className="pi-marquee">
@@ -105,90 +48,76 @@ function TechnologyMarquee() {
   );
 }
 
-export default function Showcase() {
-  const rootRef = useRef<HTMLDivElement>(null);
+export default function Showcase({ children }: { children: ReactNode }) {
+  const sequence = useRef<HTMLDivElement>(null);
+  const panel = useRef<HTMLElement>(null);
 
   useLayoutEffect(() => {
-    const root = rootRef.current;
-    if (!root) return;
-    const media = gsap.matchMedia();
-
-    media.add('(prefers-reduced-motion: no-preference)', () => {
-      const select = gsap.utils.selector(root);
-      const trigger = (element: Element) => ({
-        trigger: element, start: 'top 92%', end: 'top 65%', scrub: true
-      });
-      gsap.from(select('.pi-about-header [data-piece]'), {
-        opacity: 0, y: 6, stagger: .04, ease: 'none',
-        scrollTrigger: trigger(select('.pi-about-header h2')[0])
-      });
-      const cascade = gsap.timeline({scrollTrigger: trigger(select('.pi-bento')[0])});
-      select('.pi-photo,.pi-quality,.pi-blue-stat,.pi-dark-stat').forEach(card => {
-        cascade.from(card, {opacity: 0, y: 12, duration: 1, ease: 'none'});
-      });
-    });
-
-    return () => { media.revert(); };
+    const track = sequence.current;
+    const about = panel.current;
+    if (!track || !about) return;
+    const motion = matchMedia('(min-width: 768px) and (prefers-reduced-motion: no-preference)');
+    let stop: (() => void) | undefined;
+    const configure = () => {
+      stop?.();
+      if (!motion.matches) {
+        about.style.removeProperty('--remaining');
+        about.style.removeProperty('--pin-top');
+        return;
+      }
+      stop = observeSectionScroll(track, () => {
+        const pinTop = Math.min(0, window.innerHeight - about.offsetHeight);
+        const runway = parseFloat(getComputedStyle(track).getPropertyValue('--runway'));
+        const progress = Math.min(1, Math.max(0, (pinTop - track.getBoundingClientRect().top) / runway));
+        about.style.setProperty('--pin-top', pinTop + 'px');
+        about.style.setProperty('--remaining', String((1 - progress) ** 3));
+      }, about);
+    };
+    configure();
+    motion.addEventListener('change', configure);
+    return () => {
+      stop?.();
+      motion.removeEventListener('change', configure);
+    };
   }, []);
 
   return (
-    <div className="pi" ref={rootRef}>
-      <TechnologyMarquee />
-      <section className="light pi-showcase" id="about" aria-labelledby="pi-about-heading">
-        <header className="pi-about-header">
-          <p className="pi-eyebrow">• About me</p>
-          <h2 id="pi-about-heading" data-scrub>
-            <span><SplitText text="Building scalable fullstack" /></span>{' '}
-            <span><SplitText text="systems" /> <span data-piece><ChartBadge /></span> <SplitText text="designed for speed and" /></span>{' '}
-            <span><SplitText text="cloud reliability" /></span>
-          </h2>
-        </header>
-
-        <div className="pi-bento grid">
-          <article className="pi-bento-column pi-photo">
-            <Artwork slot="BENTO_CARD_1_BG_IMG" className="pi-card-art" />
-            <div className="pi-photo-top">
-              <strong>FULLSTACK</strong>
-              <ChartBadge />
-            </div>
-            <div className="pi-photo-bottom">
-              <strong>4+</strong>
-              <p>Production-ready applications engineered for modern web and cloud scale.</p>
-            </div>
-          </article>
-
-          <article className="pi-bento-column pi-quality">
-            <Artwork slot="BENTO_CARD_2_BG_IMG" className="pi-card-art" />
-            <div>
-              <p className="pi-small">System reliability</p>
-              <strong>99.9%</strong>
-            </div>
-            <div>
-              <div className="pi-avatars">
-                {avatars.map((slot) => <Artwork slot={slot} key={slot} />)}
-              </div>
-              <p className="pi-quality-copy">
-                “Engineering resilient architectures with clean code, low latency, and human-centric design.”
-              </p>
-            </div>
-          </article>
-
-          <div className="pi-bento-column pi-stat-stack">
-            <article className="pi-blue-stat">
-              <Artwork slot="BENTO_CARD_3_BG_IMG" className="pi-card-art" />
+    <>
+      <div className="pi"><TechnologyMarquee /></div>
+      <div className="about-sequence" ref={sequence} id="about">
+        <section className="pi light pi-showcase" ref={panel} aria-labelledby="pi-about-heading">
+          <header className="pi-about-header">
+            <p className="pi-eyebrow">&bull; About me</p>
+            <h2 id="pi-about-heading">Building scalable fullstack systems designed for <span>speed and cloud reliability</span></h2>
+          </header>
+          <div className="pi-bento">
+            <article className="pi-photo">
+              <div className="pi-image"><img src="/hero-center.svg" alt="" /></div>
+              <span className="pi-label">Fullstack</span>
+              <div><strong>4+</strong><p>Production-ready applications engineered for modern web and cloud scale.</p></div>
+            </article>
+            <article className="pi-quality">
+              <div className="pi-image"><img src="/hero-2.svg" alt="" /></div>
+              <div><span className="pi-label">System reliability</span><strong>99.9%</strong></div>
               <div>
-                <p className="pi-small">Specializations</p>
-                <strong>MERN &amp; Spring</strong>
+                <p>&ldquo;Engineering resilient architectures with clean code, low latency, and human-centric design.&rdquo;</p>
               </div>
-              <p>Full-stack distributed services with robust REST APIs and reactive interfaces.</p>
             </article>
-            <article className="pi-dark-stat">
-              <p className="pi-small">Technologies</p>
-              <strong>10+ Tools</strong>
-            </article>
+            <div className="pi-stat-stack">
+              <article className="pi-stat">
+                <span className="pi-label">Specializations</span><strong>MERN &amp; Spring</strong>
+                <p>Full-stack distributed services with robust REST APIs and reactive interfaces.</p>
+                <ul><li>MERN</li><li>Spring Boot</li></ul>
+              </article>
+              <article className="pi-stat">
+                <span className="pi-label">Technologies</span><strong>10+ Tools</strong>
+                <ul><li>Docker</li><li>PostgreSQL</li><li>TypeScript</li></ul>
+              </article>
+            </div>
           </div>
-        </div>
-      </section>
-    </div>
+        </section>
+        <div className="about-next-sheet">{children}</div>
+      </div>
+    </>
   );
 }

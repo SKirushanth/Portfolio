@@ -53,9 +53,8 @@ export default function App() {
         <div className="home-opening">
           <Hero />
         </div>
-        <Showcase />
       </div>
-      <Disciplines />
+      <Showcase><Disciplines /></Showcase>
       <Portfolio />
       <Contact />
       <Footer />
