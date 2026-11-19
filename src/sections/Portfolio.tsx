@@ -12,15 +12,16 @@ import './portfolio.css';
 const pad = (n: number) => String(n).padStart(2, '0');
 const cardSpring = { type: 'spring', stiffness: 320, damping: 32, mass: 0.9 } as const;
 const nextRoleArtwork = [
-  { part: 'badge', bounds: [56, 56, 168, 40] },
+  { part: 'badge', bounds: [40, 48, 520, 64] },
   { part: 'art', bounds: [738, 140, 402, 430] },
   { part: 'title', bounds: [56, 528, 620, 136] },
   { part: 'subtitle', bounds: [56, 683, 365, 24] },
 ] as const;
 const centeredArtwork = [
-  { part: 'title', bounds: [0, 254, 1200, 168] },
-  { part: 'art', bounds: [0, 426, 1200, 42] },
-  { part: 'subtitle', bounds: [0, 474, 1200, 48] },
+  { part: 'badge', bounds: [40, 48, 520, 64] },
+  { part: 'art', bounds: [738, 140, 402, 430] },
+  { part: 'title', bounds: [56, 528, 620, 136] },
+  { part: 'subtitle', bounds: [56, 600, 620, 80] },
 ] as const;
 
 function ProjectArtwork({ project, reduceMotion }: { project: Project; reduceMotion: boolean | null }) {
