@@ -5,10 +5,14 @@
   color: white;
 }
 
-/* Lenis handles smooth scrolling */
 html {
-  scroll-behavior: auto;
   scrollbar-gutter: stable;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 /* Ensure the font matches the clean sans-serif in your image */
