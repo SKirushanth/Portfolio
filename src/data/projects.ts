@@ -8,7 +8,7 @@ export const projects: Project[] = [
     features: ["Organize roles and job applications", "Track application stages", "Keep follow-ups in view"],
     image: "/nextrole.svg",
     glow: "#152e42",
-    tags: ["React", "FastAPI", "PostgreSQL", "Docker"],
+    tags: ["React", "FastAPI", "PostgreSQL", "Docker", "Terraform"],
     link: "https://ca-web.whiterock-25185778.centralindia.azurecontainerapps.io/",
   },
   {
